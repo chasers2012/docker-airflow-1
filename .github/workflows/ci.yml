@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - run: docker build -t "${PWD##*/}" .
-      - run: docker run "${PWD##*/}" python -V
-      - run: docker run "${PWD##*/}" version
+      - name: Build airflow
+        run: |
+          docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.airflow_curve }}
+          docker build -t ghcr.io/chasers2012/docker-airflow-1/airflow:2.2.1 --no-cache .
+          docker push ghcr.io/chasers2012/docker-airflow-1/airflow:2.2.1
